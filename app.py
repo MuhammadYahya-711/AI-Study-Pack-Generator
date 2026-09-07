@@ -43,7 +43,7 @@ with st.sidebar:
         "llama-3.3-70b-versatile",
     ],
     index=0,
-)
+    )
 
     st.divider()
 
