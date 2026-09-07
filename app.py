@@ -35,15 +35,15 @@ with st.sidebar:
     )
 
     model = st.selectbox(
-        "Groq Model",
-        [
-            "llama-3.3-70b-versatile",
-            "llama-3.1-8b-instant",
-            "openai/gpt-oss-120b",
-            "openai/gpt-oss-20b",
-        ],
-        index=0,
-    )
+    "Groq Model",
+    [
+        "llama-3.1-8b-instant",
+        "openai/gpt-oss-20b",
+        "openai/gpt-oss-120b",
+        "llama-3.3-70b-versatile",
+    ],
+    index=0,
+)
 
     st.divider()
 
