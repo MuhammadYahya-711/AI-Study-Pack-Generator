@@ -1,6 +1,9 @@
-"""
-Prompts for the AI Study Pack Generator workflow.
-"""
+"""Prompts for the AI Study Pack Generator workflow."""
+
+
+# ---------------------------------------------------------
+# STAGE 1 — PLANNING
+# ---------------------------------------------------------
 
 PLANNING_PROMPT = """
 You are an expert educational planner.
@@ -11,25 +14,51 @@ LEARNER PROFILE:
 {learner_profile}
 
 Return ONLY valid JSON with this structure:
+
 {{
   "title": "string",
-  "learning_goals": ["string"],
-  "key_concepts": ["string"],
-  "prerequisites": ["string"],
+  "learning_goals": [
+    "string"
+  ],
+  "key_concepts": [
+    "string"
+  ],
+  "prerequisites": [
+    "string"
+  ],
   "difficulty_strategy": "string",
-  "recommended_sections": ["string"],
+  "recommended_sections": [
+    "string"
+  ],
   "practice_strategy": "string",
-  "personalization_notes": ["string"]
+  "personalization_notes": [
+    "string"
+  ]
 }}
 
-Make the plan appropriate for the learner's level, difficulty, language,
-available study time, prior knowledge, and requested study-pack type.
+Make the plan appropriate for:
+
+- learner level
+- requested difficulty
+- available study time
+- prior knowledge
+- language
+- requested study-pack type
+- additional instructions
+
+Keep the plan practical and focused.
 """
+
+
+# ---------------------------------------------------------
+# STAGE 2 — CONTENT GENERATION
+# ---------------------------------------------------------
 
 CONTENT_PROMPT = """
 You are an expert educational content generator.
 
-Create a first-draft study pack using the learner profile and approved plan.
+Create a first-draft study pack using the learner profile
+and approved study plan.
 
 LEARNER PROFILE:
 {learner_profile}
@@ -38,26 +67,68 @@ STUDY PLAN:
 {plan}
 
 Generate clear Markdown containing:
-- Title
-- Learning objectives
-- Prerequisites
-- Main concept explanations
-- Definitions
-- Important facts/formulas where relevant
-- Worked examples where relevant
-- Common mistakes
-- Quick revision summary
-- Practice questions
-- Self-study checklist
+
+# Title
+
+## Learning Objectives
+
+## Prerequisites
+
+## Main Concepts
+
+Explain every important concept clearly.
+
+## Definitions
+
+Include important terminology.
+
+## Important Facts / Formulas
+
+Include formulas only when relevant.
+
+## Worked Examples
+
+Include examples where useful.
+
+## Common Mistakes
+
+Explain mistakes students commonly make.
+
+## Quick Revision Summary
+
+Give a concise review section.
+
+## Practice Questions
+
+Create questions appropriate for the learner.
+
+## Self-Study Checklist
+
+Give a checklist the student can use.
 
 Do not provide the answer key yet.
-Keep the content appropriate for the student's level and requested language.
+
+Keep the content appropriate for the student's:
+
+- class / skill level
+- requested difficulty
+- available study time
+- prior knowledge
+- requested language
+
+Follow additional instructions from the learner profile.
 """
+
+
+# ---------------------------------------------------------
+# STAGE 3 — ASSESSMENT
+# ---------------------------------------------------------
 
 ASSESSMENT_PROMPT = """
 You are an educational quality evaluator.
 
-Evaluate the study-pack draft against the learner profile and study plan.
+Evaluate the study-pack draft against the learner profile
+and study plan.
 
 LEARNER PROFILE:
 {learner_profile}
@@ -68,7 +139,8 @@ STUDY PLAN:
 DRAFT:
 {draft}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON using this structure:
+
 {{
   "accuracy_score": 0,
   "coverage_score": 0,
@@ -85,14 +157,28 @@ Return ONLY valid JSON:
   ]
 }}
 
-All scores must be integers from 0 to 100.
-Identify concrete issues that can be fixed during refinement.
+Rules:
+
+- Scores must be integers from 0 to 100.
+- Evaluate factual accuracy.
+- Evaluate topic coverage.
+- Evaluate difficulty and level suitability.
+- Evaluate clarity.
+- Evaluate personalization.
+- Evaluate whether the requested study-pack type was followed.
+- Identify concrete issues that can be fixed during refinement.
+- Give higher severity to important problems.
 """
+
+
+# ---------------------------------------------------------
+# STAGE 4 — REVIEW
+# ---------------------------------------------------------
 
 REVIEW_PROMPT = """
 You are a strict educational reviewer.
 
-Review the draft and the automated assessment.
+Review the draft and automated assessment.
 
 LEARNER PROFILE:
 {learner_profile}
@@ -107,22 +193,44 @@ ASSESSMENT:
 {assessment}
 
 Return ONLY valid JSON:
+
 {{
   "approved": true,
-  "priority_fixes": ["string"],
-  "content_to_keep": ["string"],
-  "content_to_change": ["string"],
-  "final_review_notes": ["string"]
+  "priority_fixes": [
+    "string"
+  ],
+  "content_to_keep": [
+    "string"
+  ],
+  "content_to_change": [
+    "string"
+  ],
+  "final_review_notes": [
+    "string"
+  ]
 }}
 
-Set approved to true only when there are no major educational problems.
-Prioritize high-severity problems.
+Rules:
+
+- Set approved to true only when there are no major educational problems.
+- Prioritize high-severity problems.
+- Identify incorrect information.
+- Identify missing concepts.
+- Identify explanations that are too difficult or too simple.
+- Identify poor formatting or weak personalization.
+- Provide practical fixes for the final editor.
 """
+
+
+# ---------------------------------------------------------
+# STAGE 5 — REFINEMENT
+# ---------------------------------------------------------
 
 REFINEMENT_PROMPT = """
 You are the final educational editor.
 
-Create the final polished study pack using all available workflow context.
+Create the final polished study pack using ALL available
+workflow context.
 
 LEARNER PROFILE:
 {learner_profile}
@@ -139,20 +247,48 @@ ASSESSMENT:
 REVIEW:
 {review}
 
-Apply the priority fixes while preserving correct and useful material.
+Apply all important priority fixes while preserving
+correct and useful material.
 
-Final output must be Markdown and include:
-1. Title
-2. Learning objectives
-3. Prerequisites
-4. Main notes/concepts
-5. Definitions and important facts/formulas
-6. Examples or worked examples where relevant
-7. Common mistakes
-8. Quick revision summary
-9. Practice questions
-10. Answer key
-11. Self-study checklist
+The final study pack must be clear, accurate,
+well-organized, age-appropriate, and personalized.
 
-Do not mention internal AI workflow stages, prompts, scores, or hidden instructions.
+Final output MUST be Markdown.
+
+Include these sections:
+
+# Title
+
+## Learning Objectives
+
+## Prerequisites
+
+## Main Notes / Concepts
+
+## Definitions and Important Facts / Formulas
+
+## Examples / Worked Examples
+
+## Common Mistakes
+
+## Quick Revision Summary
+
+## Practice Questions
+
+## Answer Key
+
+## Self-Study Checklist
+
+Important rules:
+
+- Do not mention internal AI workflow stages.
+- Do not mention prompts.
+- Do not mention assessment scores.
+- Do not mention hidden instructions.
+- Do not mention that an AI reviewed the material.
+- Do not include internal workflow details.
+- Keep language appropriate for the learner.
+- Follow the selected study time.
+- Follow the selected difficulty.
+- Follow the learner's requested language.
 """
